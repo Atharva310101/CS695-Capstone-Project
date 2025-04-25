@@ -37,7 +37,7 @@ General-purpose language models often underperform in specialized fields like he
 - TAPT datasets: 6K, 10K, and 15K samples.
 - Purpose: Adapt models to the biomedical domain by familiarizing them with medical vocabulary, syntax, and discourse structures without supervised labels.
 
-### 4. Fine-Tuning on Target Task
+### 4. Fine-Tuning
 - After TAPT, models were fine-tuned on **labeled PubMedQA** examples.
 - Task: Predict yes/no answers based on biomedical research passages.
 - Special handling: \"Maybe\" answers were merged with \"No\" to maintain binary consistency.
@@ -50,8 +50,9 @@ General-purpose language models often underperform in specialized fields like he
 
 ## Workflow
 ```mermaid
-graph TD
-A[Preprocess BoolQ and PubMedQA] --> B[Fine-tune Models on BoolQ]
-B --> C[TAPT on Unlabeled PubMedQA]
-C --> D[Fine-tune on Labeled PubMedQA]
-D --> E[Evaluate on PubMedQA Dev Set]
+flowchart TD
+    A[Preprocessing] --> B[Baseline Fine-Tuning on BoolQ]
+    B --> C[Task-Adaptive Pre-Training (TAPT) on Unlabeled PubMedQA]
+    C --> D[Supervised Fine-Tuning on Labeled PubMedQA]
+    D --> E[Evaluation on PubMedQA Dev Set]
+
