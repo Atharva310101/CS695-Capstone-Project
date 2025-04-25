@@ -47,12 +47,12 @@ General-purpose language models often underperform in specialized fields like he
 - Metrics:
   - **Accuracy**: Overall proportion of correct predictions.
   - **F1 Score**: Harmonic mean of precision and recall, essential for handling minor class imbalance.
-
 ## Workflow
 ```mermaid
 flowchart TD
     A[Preprocessing] --> B[Baseline Fine-Tuning on BoolQ]
-    B --> C[Task-Adaptive Pre-Training (TAPT) on Unlabeled PubMedQA]
+    B --> C[Task-Adaptive Pre-Training - TAPT on Unlabeled PubMedQA]
     C --> D[Supervised Fine-Tuning on Labeled PubMedQA]
-    D --> E[Evaluation on PubMedQA Dev Set]
+    D --> E[Evaluation]
+
 
