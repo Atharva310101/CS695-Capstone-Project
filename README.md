@@ -18,26 +18,35 @@ General-purpose language models often underperform in specialized fields like he
 ## Methodology
 
 ### 1. Preprocessing
-- Combined `ori_pqal.json` (labeled) and 5,000 samples from `ori_pqaa.json` (unlabeled).
-- Mapped answers to binary classification (Yes/No).
-- Created train/dev splits for evaluation.
+- **BoolQ**:
+  - Loaded the BoolQ dataset containing yes/no questions from general English text.
+  - Prepared inputs as question-passage pairs for binary classification fine-tuning.
+- **PubMedQA**:
+  - Combined labeled (`ori_pqal.json`) and a subset of unlabeled (`ori_pqaa.json`) data.
+  - Converted answers into binary format: \"yes\" = 1, \"no\" = 0, and \"maybe\" treated as \"no\" for binary classification.
+  - Formatted the dataset into standardized question-passage pairs.
+  - Created train and development (dev) splits for supervised fine-tuning.
 
-### 2. Source Task Fine-tuning
-- Models: **BERT**, **DistilBERT**, and **RoBERTa**.
-- Fine-tuned on BoolQ to learn general yes/no question patterns.
+### 2. Baseline Fine-Tuning on Source Task
+- **Models Used**: BERT, DistilBERT, RoBERTa (from HuggingFace Transformers).
+- Fine-tuned each model on the **BoolQ** dataset to build a strong foundation in general yes/no question answering.
+- Objective: Enable models to learn general reasoning skills over diverse textual inputs.
 
 ### 3. Task-Adaptive Pre-Training (TAPT)
-- Further pre-training on **unlabeled PubMedQA passages**.
-- Sample sizes: 6K, 10K, and 15K.
-- Objective: Expose models to biomedical language distribution without using labels.
+- Conducted TAPT by continuing masked language modeling on **unlabeled PubMedQA passages**.
+- TAPT datasets: 6K, 10K, and 15K samples.
+- Purpose: Adapt models to the biomedical domain by familiarizing them with medical vocabulary, syntax, and discourse structures without supervised labels.
 
-### 4. Target Task Fine-tuning
-- Fine-tuned TAPT models on labeled PubMedQA samples.
-- Task: Binary classification (Yes/No, with \"Maybe\" mapped to \"No\").
+### 4. Fine-Tuning on Target Task
+- After TAPT, models were fine-tuned on **labeled PubMedQA** examples.
+- Task: Predict yes/no answers based on biomedical research passages.
+- Special handling: \"Maybe\" answers were merged with \"No\" to maintain binary consistency.
 
-### 5. Evaluation Metrics
-- **Accuracy**: Measures overall correctness.
-- **F1 Score**: Balances precision and recall, especially important for slightly imbalanced datasets.
+### 5. Evaluation
+- Models were evaluated on the PubMedQA development set.
+- Metrics:
+  - **Accuracy**: Overall proportion of correct predictions.
+  - **F1 Score**: Harmonic mean of precision and recall, essential for handling minor class imbalance.
 
 ## Workflow
 ```mermaid
