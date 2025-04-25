@@ -7,13 +7,28 @@ This project explores **transfer learning and Task-Adaptive Pre-Training (TAPT)*
 General-purpose language models often underperform in specialized fields like healthcare, where domain-specific language and contextual understanding are critical. Annotated biomedical datasets are scarce and expensive to produce. This project investigates how **TAPT** can bridge the domain gap using unlabeled biomedical text, minimizing reliance on large labeled datasets while improving real-world applicability in clinical and research settings.
 
 ## Datasets
-- **Source Domain**: [BoolQ](https://github.com/google-research-datasets/boolean-questions)
-  - Yes/No questions from general English sources
-  - 9,427 training examples
-- **Target Domain**: [PubMedQA](https://pubmedqa.github.io/)
-  - Yes/No/Maybe questions derived from biomedical research papers
-  - Labeled subset used for supervised fine-tuning
-  - Unlabeled passages used for TAPT
+
+- **Source Domain**: [BoolQ (Boolean Questions Dataset)](https://github.com/google-research-datasets/boolean-questions)
+  - A natural language understanding dataset containing short yes/no questions based on a given passage.
+  - Extracted from real-world web data (Wikipedia passages).
+  - Contains **9,427 training examples**, each consisting of:
+    - A question
+    - A passage (context paragraph)
+    - A yes/no answer
+  - Purpose: To train models for general yes/no question answering over diverse, open-domain text.
+
+- **Target Domain**: [PubMedQA (Biomedical Question Answering Dataset)](https://pubmedqa.github.io/)
+  - Designed for machine reading comprehension and question answering in the biomedical field.
+  - Based on abstracts from PubMed research papers, focusing on factual yes/no/maybe clinical research questions.
+  - Two subsets were used:
+    - **Labeled Subset** (`ori_pqal.json`):
+      - 1,000+ biomedical questions paired with short passages and annotated answers (Yes/No/Maybe).
+      - Used for supervised fine-tuning.
+      - \"Maybe\" answers were mapped to \"No\" for binary classification consistency.
+    - **Unlabeled Subset** (`ori_pqaa.json`):
+      - 5,000+ biomedical questions with passages, but without ground-truth labels.
+      - Used for **Task-Adaptive Pre-Training (TAPT)** to adapt models to biomedical language before fine-tuning.
+  - Purpose: To evaluate and adapt models to specialized biomedical knowledge and clinical reasoning tasks.
 
 ## Methodology
 
@@ -69,12 +84,6 @@ flowchart TD
 
 - Fine-tuning RoBERTa on PubMedQA significantly improved performance compared to baseline training on BoolQ.
 - TAPT with 10K samples provided the best balance between sample size and performance improvement.
-- 
+
 ## Conclusion
 This project demonstrates that **Task-Adaptive Pre-Training (TAPT)** is an effective strategy to enhance the domain transferability of general-purpose QA models to the biomedical domain. By adapting RoBERTa using unlabeled PubMedQA passages before fine-tuning, we achieved significant gains in accuracy and F1 score on the biomedical QA task.
-
-## Future Work
-- Explore **Domain-Adaptive Pre-Training (DAPT)** in conjunction with TAPT to further improve domain alignment.
-- Implement **multi-task learning** strategies using other biomedical QA datasets to enhance generalization.
-- Investigate **knowledge distillation** techniques to create lightweight models suitable for clinical deployment and real-time inference.
-
