@@ -54,5 +54,27 @@ flowchart TD
     B --> C[Task-Adaptive Pre-Training - TAPT on Unlabeled PubMedQA]
     C --> D[Supervised Fine-Tuning on Labeled PubMedQA]
     D --> E[Evaluation]
+```
+## Results
 
+| Model                      | Accuracy | F1 Score |
+|-----------------------------|----------|----------|
+| BERT (BoolQ)                | 71.53%   | 78.93%   |
+| DistilBERT (BoolQ)          | 70.73%   | 77.35%   |
+| RoBERTa (BoolQ)             | 78.35%   | 82.61%   |
+| RoBERTa (→ PubMedQA)        | 84.42%   | 91.31%   |
+| TAPT-6K + Fine-Tuning       | 84.83%   | 91.79%   |
+| TAPT-10K + Fine-Tuning      | **89.83%** | **94.08%** |
+| TAPT-15K + Fine-Tuning      | 87.92%   | 92.96%   |
+
+- Fine-tuning RoBERTa on PubMedQA significantly improved performance compared to baseline training on BoolQ.
+- TAPT with 10K samples provided the best balance between sample size and performance improvement.
+- 
+## Conclusion
+This project demonstrates that **Task-Adaptive Pre-Training (TAPT)** is an effective strategy to enhance the domain transferability of general-purpose QA models to the biomedical domain. By adapting RoBERTa using unlabeled PubMedQA passages before fine-tuning, we achieved significant gains in accuracy and F1 score on the biomedical QA task.
+
+## Future Work
+- Explore **Domain-Adaptive Pre-Training (DAPT)** in conjunction with TAPT to further improve domain alignment.
+- Implement **multi-task learning** strategies using other biomedical QA datasets to enhance generalization.
+- Investigate **knowledge distillation** techniques to create lightweight models suitable for clinical deployment and real-time inference.
 
